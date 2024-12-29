@@ -3,7 +3,6 @@
 <head>
     <title>Edit Client</title>
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
-
 </head>
 <body>
 <h1>Edit Client</h1>
@@ -11,17 +10,24 @@
 <div th:if="${successMessage}" style="color: green;">[[${successMessage}]]</div>
 <div th:if="${errorMessage}" style="color: red;">[[${errorMessage}]]</div>
 
-<form th:action="@{/clients/{id}/edit(id=${client.id})}" method="post">
+<form th:action="@{/clients/{id}/edit(id=${id})}" method="post" th:object="${client}">
     <label>Full Name:</label>
-    <input type="text" name="fullName" th:value="${client.fullName}" required />
-    <br />
+    <input type="text" th:field="*{fullName}" placeholder="Full Name" required/>
+    <div th:if="${#fields.hasErrors('fullName')}" style="color: red;">
+        <p th:each="error : ${#fields.errors('fullName')}" th:text="${error}"></p>
+    </div>
+    <br/>
+
     <label>Birth Date:</label>
-    <input type="date" name="birthDate" th:value="${client.birthDate}" required />
-    <br />
+    <input type="date" th:field="*{birthDate}" required/>
+    <div th:if="${#fields.hasErrors('birthDate')}" style="color: red;">
+        <p th:each="error : ${#fields.errors('birthDate')}" th:text="${error}"></p>
+    </div>
+    <br/>
+
     <button type="submit">Update</button>
 </form>
 
 <a href="/clients">Back to list</a>
-
 </body>
 </html>

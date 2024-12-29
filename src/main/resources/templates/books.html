@@ -42,13 +42,25 @@
 </table>
 
 <h2>Add Book</h2>
-<form action="/books" method="post">
+<form th:action="@{/books}" method="post" th:object="${book}">
     <label>Title:</label>
-    <input type="text" name="title" placeholder="Title" required/>
+    <input type="text" th:field="*{title}" placeholder="Title"/>
+    <div th:if="${#fields.hasErrors('title')}" style="color: red;">
+        <p th:each="error : ${#fields.errors('title')}" th:text="${error}"></p>
+    </div>
+
     <label>Author:</label>
-    <input type="text" name="author" placeholder="Author" required/>
+    <input type="text" th:field="*{author}" placeholder="Author"/>
+    <div th:if="${#fields.hasErrors('author')}" style="color: red;">
+        <p th:each="error : ${#fields.errors('author')}" th:text="${error}"></p>
+    </div>
+
     <label>ISBN:</label>
-    <input type="text" name="isbn" placeholder="ISBN" required/>
+    <input type="text" th:field="*{isbn}" placeholder="ISBN"/>
+    <div th:if="${#fields.hasErrors('isbn')}" style="color: red;">
+        <p th:each="error : ${#fields.errors('isbn')}" th:text="${error}"></p>
+    </div>
+
     <button type="submit">Add</button>
 </form>
 </body>

@@ -1,6 +1,7 @@
 package ru.zaytsev.library_service.web.handler;
 
 import org.springframework.ui.Model;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -9,6 +10,8 @@ import ru.zaytsev.library_service.exceptions.ActiveRentalException;
 import ru.zaytsev.library_service.exceptions.DuplicateEntityException;
 import ru.zaytsev.library_service.exceptions.EntityNotFoundException;
 import ru.zaytsev.library_service.exceptions.ValidationException;
+
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -49,8 +52,19 @@ public class GlobalExceptionHandler {
         return "error";
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public String handleValidationException(MethodArgumentNotValidException ex, Model model) {
+        model.addAttribute("errorMessage", "Validation failed: " + ex.getBindingResult().getFieldErrors()
+                .stream()
+                .map(error -> error.getField() + " " + error.getDefaultMessage())
+                .collect(Collectors.joining(", ")));
+        return "books";
+    }
+
     private String determineRedirectPath(String errorMessage) {
-        if (errorMessage.contains("Book")) {
+        if (errorMessage.contains("Book rented") || errorMessage.contains("already rented")) {
+            return "redirect:/rentals";
+        } else if (errorMessage.contains("Book")) {
             return "redirect:/books";
         } else if (errorMessage.contains("Client")) {
             return "redirect:/clients";
@@ -59,6 +73,7 @@ public class GlobalExceptionHandler {
         }
         return "redirect:/";
     }
+
 }
 
 
