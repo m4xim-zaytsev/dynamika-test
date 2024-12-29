@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Error</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+<body>
+<h1> Something went wrong.</h1>
+
+<div>
+    <p th:text="${errorMessage}">An unexpected error occurred.</p>
+</div>
+
+<h2>Navigation</h2>
+<ul>
+    <li><a href="/clients">Go to Clients</a></li>
+    <li><a href="/books">Go to Books</a></li>
+    <li><a href="/rentals">Go to Rentals</a></li>
+</ul>
+
+</body>
+</html>

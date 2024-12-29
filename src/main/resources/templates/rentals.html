@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Book Rentals</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+<body>
+<h1>Book Rentals</h1>
+
+<div>
+    <a href="/books">Go to Books</a> |
+    <a href="/clients">Go to Clients</a>
+</div>
+
+<div th:if="${successMessage}" style="color: green;">[[${successMessage}]]</div>
+<div th:if="${errorMessage}" style="color: red;">[[${errorMessage}]]</div>
+
+<h2>Active Rentals</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Client ID</th>
+        <th>Client</th>
+        <th>Book ID</th>
+        <th>Book</th>
+        <th>Rental Date</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="rental : ${activeRentals}">
+        <td th:text="${rental.client.id}"></td>
+        <td th:text="${rental.client.fullName}"></td>
+        <td th:text="${rental.book.id}"></td>
+        <td th:text="${rental.book.title}"></td>
+        <td th:text="${rental.rentalDate}"></td>
+        <td>
+            <form th:action="@{/rentals/{rentalId}/return(rentalId=${rental.id})}" method="post" style="display: inline;">
+                <button type="submit">Return</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>Rent a Book</h2>
+<form action="/rentals" method="post">
+    <label>Client:</label>
+    <select name="clientId">
+        <option th:each="client : ${clients}" th:value="${client.id}" th:text="${client.fullName}"></option>
+    </select>
+    <label>Book:</label>
+    <select name="bookId">
+        <option th:each="book : ${books}" th:value="${book.id}" th:text="${book.title}"></option>
+    </select>
+    <button type="submit">Rent</button>
+</form>
+</body>
+</html>
